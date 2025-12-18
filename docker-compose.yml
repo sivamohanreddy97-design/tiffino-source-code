@@ -1,0 +1,272 @@
+services:
+ 
+  mysql:
+
+    image: mysql:8.0
+
+    container_name: mysql
+
+    restart: always
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: root
+
+      MYSQL_DATABASE: tiffino_db
+
+    ports:
+
+      - "3306:3306"
+
+    volumes:
+
+      - mysql_data:/var/lib/mysql
+ 
+  eureka-service:
+
+    build: ./tiffino-backend/eureka-server
+
+    container_name: eureka-service
+
+    ports:
+
+      - "8990:8990"
+ 
+  api-gateway:
+
+    build: ./tiffino-backend/api-gateway
+
+    container_name: api-gateway
+
+    ports:
+
+      - "8080:8080"
+
+    depends_on:
+
+      - eureka-service
+ 
+  user-service:
+
+    build: ./tiffino-backend/userservice
+
+    container_name: user-service
+
+    ports:
+
+      - "8081:8081"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  menu-service:
+
+    build: ./tiffino-backend/menu-service
+
+    container_name: menu-service
+
+    ports:
+
+      - "8082:8082"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  order-service:
+
+    build: ./tiffino-backend/order-service
+
+    container_name: order-service
+
+    ports:
+
+      - "8083:8083"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  payment-service:
+
+    build: ./tiffino-backend/payment-service
+
+    container_name: payment-service
+
+    ports:
+
+      - "8084:8084"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  delivery-service:
+
+    build: ./tiffino-backend/delivery-service
+
+    container_name: delivery-service
+
+    ports:
+
+      - "8085:8085"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  notification-service:
+
+    build: ./tiffino-backend/notification-service
+
+    container_name: notification-service
+
+    ports:
+
+      - "8086:8086"
+
+    depends_on:
+
+      - eureka-service
+ 
+  review-service:
+
+    build: ./tiffino-backend/review-service
+
+    container_name: review-service
+
+    ports:
+
+      - "8087:8087"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  subscription-service:
+
+    build: ./tiffino-backend/subscription-service
+
+    container_name: subscription-service
+
+    ports:
+
+      - "8088:8088"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  loyalty-service:
+
+    build: ./tiffino-backend/loyalty-service
+
+    container_name: loyalty-service
+
+    ports:
+
+      - "8089:8089"
+
+    depends_on:
+
+      - mysql
+
+      - eureka-service
+
+    environment:
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tiffino_db
+
+      SPRING_DATASOURCE_USERNAME: root
+
+      SPRING_DATASOURCE_PASSWORD: root
+ 
+  frontend:
+
+    build: ./tiffino-Frontend
+
+    container_name: tiffino-frontend
+
+    ports:
+
+      - "4200:4200"
+
+    depends_on:
+
+      - api-gateway
+ 
+volumes:
+
+  mysql_data:
+ 

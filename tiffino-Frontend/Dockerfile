@@ -1,18 +1,12 @@
-
-FROM node:18
-
-
-WORKDIR /app
-
-
-COPY package*.json ./
-
-RUN npm install
-
-
-COPY . .
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+FROM nginx:alpine
+ 
+COPY dist/tiffino-frontend/browser /usr/share/nginx/html
+ 
+RUN chmod -R 777 /usr/share/nginx/html
+ 
+COPY default.conf /etc/nginx/conf.d/default.conf
+ 
+EXPOSE 80
+ 
+CMD ["nginx", "-g", "daemon off;"]
 
