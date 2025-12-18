@@ -2,7 +2,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY target/eureka-service.jar app.jar
+COPY target/eureka-server-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8761
 
